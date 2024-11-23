@@ -48,7 +48,7 @@ def ping(ip,port):
         print("Ping failed: Server in start/stop state. ")
         return -2
     try:
-        return socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect_ex((ip,port))
+        return socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect_ex(("127.0.0.1",port))
     except socket.gaierror:
         print("Ping failed: Address unresolvable. ")
         return -3
@@ -113,7 +113,6 @@ async def start(inter):
         await inter.edit_original_message(content="Server is already running! ")
     else:
         asyncio.create_task(server())
-        asyncio.create_task(shutdown())
         await inter.edit_original_message(content="Started server. ")
 
 @mcBot.slash_command(description="Attempts to stop the server")
@@ -139,7 +138,7 @@ async def info(inter):
 @mcBot.slash_command(description="Checks server address")
 async def ipcheck(inter):
     await inter.response.defer()
-    connectcode = ping(os.getenv("server-address").split(":")[0],serverport)
+    connectcode = ping(os.getenv("server-address").split(":")[0],int(serverport))
     if connectcode == 0:
         infoout = f'''I am able to ping the server at {os.getenv("server-address")}. 
         Check that the address you set in Minecraft matches this. If it's correct, 
