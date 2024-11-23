@@ -189,40 +189,6 @@ async def say(inter,message:str):
 async def help(inter):
     await inter.response.send_message("There are 5 commands that are available to use. \nTo start the server, use `/start`. \nTo get server information, use `/info`. \nTo manually stop the server, use `/stop`. This will only stop the server if no players are online. \nTo send a message in the server, use `/say <message>`. \nIf the address given in `/info` does not work, you can do `/ipcheck`. This will update the server address if the current one does not work. ")
 
-@mcBot.slash_command(description="Sets a new address for the Minecraft server")
-async def ipset(inter,address:str,port:int = serverport):
-    """
-    Sets a new address for the Minecraft server
-
-    Parameters
-    ----------
-    address: The new server address
-    port: The new server port (optional)
-    """
-    if str(inter.author.id) not in os.getenv("server-op").split(','):
-        await inter.response.send_message(content="You don't have access to this command! ",ephemeral=True)
-        return
-    await inter.response.defer()
-    connectcode = ping(address,port)
-    if serverport != port:
-        serverport = port
-    if connectcode == 0:
-        await inter.edit_original_message(content="This address works. I will update it now. ")
-        if port == 25565:
-            os.environ["server-address"] = address
-        else:
-            os.environ["server-address"] = address + ":" + port
-    elif connectcode == -1:
-        await inter.edit_original_message(content="The server is not running. Please start the server so I can check that this address works. ")
-    elif connectcode == -2:
-        await inter.edit_original_message(content="The server is either starting up, or shutting down. Please wait a bit, and then try again. ")
-    elif connectcode == -3:
-        await inter.edit_original_message(content="This address couldn't be resolved. This is probably because the URL/IP doesn't exist. ")
-    elif connectcode == 10060:
-        await inter.edit_original_message(content="This address timed out when pinged. This is probably due to the port not being forwarded. ")
-    else:
-        await inter.edit_original_message(content="This address doesn't work. I cannot pin the error down. ")
-
 @mcBot.slash_command(description="Executes a Minecraft command on the Minecraft server")
 async def cmd(inter,command:str):
     """
