@@ -1,0 +1,49 @@
+[15:44:58] [ServerMain/INFO]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[15:45:00] [ServerMain/INFO]: Loaded 1370 recipes
+[15:45:00] [ServerMain/INFO]: Loaded 1481 advancements
+[15:45:00] [Server thread/INFO]: Starting minecraft server version 1.21.4
+[15:45:00] [Server thread/INFO]: Loading properties
+[15:45:00] [Server thread/INFO]: Default game type: SURVIVAL
+[15:45:00] [Server thread/INFO]: Generating keypair
+[15:45:00] [Server thread/INFO]: Starting Minecraft server on *:25565
+[15:45:00] [Server thread/INFO]: Using epoll channel type
+[15:45:00] [Server thread/INFO]: Preparing level "world"
+[15:45:01] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Worker-Main-1/INFO]: Preparing spawn area: 0%
+[15:45:07] [Server thread/INFO]: Time elapsed: 6558 ms
+[15:45:07] [Server thread/INFO]: Done (6.874s)! For help, type "help"
+[15:45:07] [Server thread/INFO]: Starting remote control listener
+[15:45:07] [Server thread/INFO]: Thread RCON Listener started
+[15:45:07] [Server thread/INFO]: RCON running on 0.0.0.0:25575
+[15:45:41] [User Authenticator #1/INFO]: UUID of player Machoooooo is 826f170e-dcc3-4bdd-8bc9-169691364240
+[15:45:41] [Server thread/INFO]: Machoooooo[/192.168.1.2:64883] logged in with entity id 2 at (35.06048004838331, 65.0, -329.0799417589757)
+[15:45:41] [Server thread/INFO]: Machoooooo joined the game
+[15:45:54] [RCON Listener #1/INFO]: Thread RCON Client /192.168.1.15 started
+[15:45:54] [Server thread/INFO]: [Rcon: Stopping the server]
+[15:45:54] [RCON Client /192.168.1.15 #2/INFO]: Thread RCON Client /192.168.1.15 shutting down
+[15:45:54] [Server thread/INFO]: Stopping server
+[15:45:54] [Server thread/INFO]: Saving players
+[15:45:54] [Server thread/INFO]: Machoooooo lost connection: Server closed
+[15:45:54] [Server thread/INFO]: Machoooooo left the game
+[15:45:54] [Server thread/INFO]: Saving worlds
+[15:45:54] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[15:45:55] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[15:45:55] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[15:45:55] [Server thread/INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[15:45:55] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[15:45:55] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[15:45:55] [Server thread/INFO]: ThreadedAnvilChunkStorage: All dimensions are saved
+[15:45:55] [Server thread/INFO]: Thread RCON Listener stopped

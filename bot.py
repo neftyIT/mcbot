@@ -40,19 +40,38 @@ def rcon(cmd):
         print("Rcon unsuccessful: Server in start/stop state. ")
         return ("The server is either starting up, or shutting down. Please wait a bit, and then try again. ")
 
-def ping(ip,port):
+def ping(ip, port):
     if not running:
-        print("Ping failed: Server down. ")
+        print("Ping failed: Server down.")
         return -1
+    
+    # Check server state with rcon
     if not rcon("list").startswith("There are"):
-        print("Ping failed: Server in start/stop state. ")
+        print("Ping failed: Server in start/stop state.")
         return -2
+    
     try:
-        return socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect_ex(("127.0.0.1",port))
+        # Use the provided IP and port to attempt the socket connection
+        connection_result = socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect_ex((ip, port))
+        
+        # Return 0 if the connection was successful
+        if connection_result == 0:
+            return 0
+        else:
+            # If connect_ex returns a non-zero value, the connection failed
+            return connection_result
     except socket.gaierror:
-        print("Ping failed: Address unresolvable. ")
+        print("Ping failed: Address unresolvable.")
         return -3
-
+    except socket.timeout:
+        print("Ping failed: Connection timeout.")
+        return -4
+    except ConnectionRefusedError:
+        print("Ping failed: Connection refused.")
+        return -5
+    except Exception as e:
+        print(f"Ping failed: Unknown error - {e}")
+        return -6
 async def server():
     global running
     running = True
@@ -69,14 +88,20 @@ async def server():
     print("Server stopped. ")
 
 async def shutdown():
-    print("Auto shutdown thread started. ") 
+    print("Auto shutdown thread started. ")
     await asyncio.sleep(300)
     while running:
         print("Attempting auto shutdown... ")
-        rcon("execute unless entity @a run stop")
+        try:
+            # Send the 'stop' command directly to the server via RCON
+            rcon("stop")  # Direct shutdown command
+        except Exception as e:
+            print(f"Error while attempting to shutdown: {e}")
         await asyncio.sleep(180)
 
 async def webhook_send(content,uname,avatar):
+    print(f"Message to Minecraft Server: {content}")  # Log the content to check it's being sent
+    '''
     for channelid in os.getenv("chat-channel-id").split(","):
         channel = mcBot.get_channel(int(channelid))
         exist = False
@@ -93,6 +118,7 @@ async def webhook_send(content,uname,avatar):
                 pass
             except disnake.errors.HTTPException:
                 pass
+    '''
 
 async def on_line(line):
     try:
@@ -121,7 +147,9 @@ async def stop(inter):
     if running:
         print("Attempting manual shutdown... ")
         try:
-            await inter.edit_original_message(content=rcon("execute unless entity @a run stop"))
+            # Send the 'stop' command directly to the server via RCON
+            rcon("stop")  # Directly stop the server without using execute
+            await inter.edit_original_message(content="Server is shutting down.")
         except disnake.errors.HTTPException:
             await inter.edit_original_message(content="Could not stop the server. ")
     else:
