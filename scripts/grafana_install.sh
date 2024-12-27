@@ -3,14 +3,16 @@
 # Variables
 GRAFANA_REPO="deb https://packages.grafana.com/oss/deb stable main"
 GRAFANA_GPG_KEY_URL="https://packages.grafana.com/gpg.key"
-GRAFANA_INI="${CONFIG_DIR}/grafana.ini"
 SERVICE_FILE="/etc/systemd/system/grafana-server.service"
 
 # Prompt user for config directory
-read -p "Enter the directory for the Grafana configuration files (default: ~/mcbot/config/grafana): " config_dir
+read -p "Enter the directory for the Grafana configuration files (default: $HOME/mcbot/config/grafana): " config_dir
 
 # Set default value if the user doesn't input anything
-config_dir="${config_dir:~/mcbot/config/grafana}"
+config_dir="${config_dir:-$HOME/mcbot/config/grafana}"
+
+# Set the path for the Grafana configuration file
+GRAFANA_INI="${config_dir}/grafana.ini"
 
 # Add the Grafana APT repository:
 echo "Adding Grafana APT repository..."
@@ -34,8 +36,7 @@ sudo systemctl stop grafana-server
 
 # Backup the default Grafana configuration file
 echo "Backing up the default Grafana configuration file..."
-sudo cp /etc/grafana/grafana.ini $CONFIG_DIR/grafana.ini.bak
-
+sudo cp /etc/grafana/grafana.ini $config_dir/grafana.ini.bak
 
 # Update the Grafana service file
 echo "Updating the Grafana service file..."
@@ -51,7 +52,7 @@ EnvironmentFile=-/etc/default/grafana-server
 User=grafana
 Group=grafana
 Type=simple
-ExecStart=/usr/sbin/grafana-server --config=$CONFIG_DIR/grafana.ini \
+ExecStart=/usr/sbin/grafana-server --config=$GRAFANA_INI \
 --homepath=/usr/share/grafana \
 cfg:default.paths.logs=/var/log/grafana \
 cfg:default.paths.data=/var/lib/grafana \
@@ -72,4 +73,3 @@ sudo systemctl enable grafana-server
 sudo systemctl start grafana-server
 
 echo "Grafana installation and configuration complete."
-
