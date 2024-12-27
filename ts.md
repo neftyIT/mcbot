@@ -1,5 +1,5 @@
 #mcbot
 
-Current Issue:
+### Current Issue:
 
-The MC Bot won't connect to the server as no commands work at all
+The Grafana Install scripts run but it appears the way the Directories are being place does not allow Grafana to run on test server.
