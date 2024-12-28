@@ -1,0 +1,5 @@
+server:
+  rcon:
+    host: "localhost"
+    port: 25575
+    password: "p@ssw0rd"
