@@ -1,3 +1,5 @@
+# IN TESTING STAGE I AM NOT RESPONSILBLE IF YOU CLONE THIS REPO BEFORE I COMPLETE IT
+
 # Minecraft Server with Discord Bot Management
 
 This repository contains a Minecraft server setup that is managed using a Discord bot written in Python. The bot allows server management through a variety of commands, and the server's metrics and logs are visualized using Grafana.
