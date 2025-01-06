@@ -1,5 +1,9 @@
 # IN TESTING STAGE I AM NOT RESPONSILBLE IF YOU CLONE THIS REPO BEFORE I COMPLETE IT
 
+## Notes from Nefty
+
+Please note that is my first repo that I am pushing out and I know it is not perfect (as nothing is in life). I had the help of AI tools to help me understand and learn more as I go. I used Python to create the commands so the code definitely needs more work done to it to make it robust. Please be sure to report any issues or anything that you know or think can help me create this better as I am still learning and growing my developer skills.
+
 # Minecraft Server with Discord Bot Management
 
 This repository contains a Minecraft server setup that is managed using a Discord bot written in Python. The bot allows server management through a variety of commands, and the server's metrics and logs are visualized using Grafana.
@@ -90,8 +94,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 1. Add Prometheus Installation Script
 2. Add information on how to properly set up Grafana, Prometheus, the Minecraft Node Exporter, and, if needed, Prometheus Node Exporter for node metrics.
 3. Fix any small issues that may arise as this gets cloned or forked.
-
-
-### Notes from Nefty
-
-Please note that is my first repo that I am pushing out and I know it is not perfect. I had the help of AI tools to understand and learn on how to use Python to create the commands so the code definitely needs more work done to it to make it robust. Please be sure to report any issues or anything that you know or think can help me create this better as I am still learning and growing my developer skills.
