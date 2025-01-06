@@ -27,9 +27,8 @@ The Discord bot currently supports the following commands for managing the Minec
 ## Setup
 
 ### Prerequisites
-- **Minecraft server**: A running Minecraft server to connect the bot to.
-- **Discord Bot**: A Discord bot token to manage the server.
-- **Grafana**: Installed and configured for monitoring purposes.
+- **Minecraft server**: A running Minecraft server to connect the bot to or you can use the 'server.jar' in the 'newmcworld' directory to create a new world.
+- **Discord Bot**: A Discord bot token to manage the server, a Discord server to add the bot to and a channel to type the commands to.
 
 ### Installation
 1. Clone this repository:
@@ -44,21 +43,20 @@ The Discord bot currently supports the following commands for managing the Minec
     ```
 
 3. Configure the bot:
-    - Add your Discord bot token and Minecraft server details in the `config.json` file.
+    - Add your Discord bot token and Minecraft server details in the `bot.env` file.
 
 4. Start the bot:
     ```bash
     python bot.py
     ```
 
-5. Set up Grafana to visualize metrics and logs (Prometheus, Loki, Minecraft Exporter, and any other Grafana tool).
+5. Set up Grafana to visualize metrics of your Minecraft Server (Prometheus, Minecraft Exporter, and any other Grafana tool).
 
 ## Monitoring with Grafana
 
 To monitor the Minecraft server, we utilize the following tools:
 
-- **Prometheus**: Collects metrics from the server.
-- **Loki**: Stores and visualizes logs from the server.
+- **Prometheus**: Collects metrics for visualization on Grafana.
 - **Minecraft Exporter**: Exports Minecraft server metrics to Prometheus for visualization.
 
 ### Grafana Setup
@@ -73,23 +71,25 @@ To use the script:
 
 1. Navigate to the `scripts` directory
 
-2. Edit the grafana_install.sh script to customize the directory path and other configurations as per your requirements.
+2. Run the script
 
-3.Run the script
+3. This script should install Grafana and it's configuration needed. You should be able to find the 'grafana.ini' file in the '/etc/grafana' directory.
 
-4. This script does the following:
-
-Installs Grafana.
-Configures Grafana with custom settings (including the grafana.ini file).
-Updates the Grafana service file to point to the custom configuration.
-
+### Minecraft Node Exporter
+The Minecraft Node Exporter being used was created by Dirien on Github. Please see below for the link to his repo for the MC Node Exporter and big thanks from myself as this helped me not have to create a custome node exporter!
+[https://github.com/dirien/minecraft-prometheus-exporter]
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Changes:
-- **Grafana Installation Script**: Moved the full installation script to the `/scripts` directory, with instructions to customize the script before running it.
-- **Note for Customization**: Mentioned that users should edit the `grafana_install.sh` script to customize the directory and other paths as needed.
+### To Do List!
 
-Now, users can easily locate the script in the `/scripts` folder and modify it according to their setup before running it. Let me know if you need further modifications!
+1. Add Prometheus Installation Script
+2. Add information on how to properly set up Grafana, Prometheus, the Minecraft Node Exporter, and, if needed, Prometheus Node Exporter for node metrics.
+3. Fix any small issues that may arise as this gets cloned or forked.
+
+
+### Notes from Nefty
+
+Please note that is my first repo that I am pushing out and I know it is not perfect. I had the help of AI tools to understand and learn on how to use Python to create the commands so the code definitely needs more work done to it to make it robust. Please be sure to report any issues or anything that you know or think can help me create this better as I am still learning and growing my developer skills.
