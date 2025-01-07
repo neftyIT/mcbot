@@ -6,9 +6,12 @@ Please note that is my first repo that I am pushing out and I know it is not per
 
 ### To Do List!
 
-1. Add Prometheus Installation Script ✅ 
+1. Add Prometheus Installation Script (Semi ✅)
 2. Add information on how to properly set up Grafana, Prometheus, the Minecraft Node Exporter, and, if needed, Prometheus Node Exporter for node metrics.
 3. Fix any small issues that may arise as this gets cloned or forked.
+
+#### Current Task
+Ensure the Prometheus installation script adds the Scrape Config for the MC Node Exporter to its .yml
 
 # Minecraft Server with Discord Bot Management
 
