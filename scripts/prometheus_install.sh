@@ -23,6 +23,16 @@ EOF
 
 echo "Minecraft Node Exporter configuration added successfully."
 
+# Verify that the Minecraft Node Exporter config was added
+echo "Verifying Minecraft Node Exporter configuration..."
+
+if grep -q "localhost:9150" "$PROMETHEUS_CONFIG"; then
+    echo "Minecraft Node Exporter configuration added successfully."
+else
+    echo "Failed to add Minecraft Node Exporter configuration. Please check the script or add configuration manually by adding the scrape config to the prometheus.yml file."
+    exit 1
+fi
+
 # Restart Prometheus to apply changes
 echo "Restarting Prometheus service..."
 sudo systemctl restart prometheus
