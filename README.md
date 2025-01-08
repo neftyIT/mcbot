@@ -1,4 +1,4 @@
-# IN TESTING STAGE I AM NOT RESPONSILBLE IF YOU CLONE THIS REPO BEFORE I COMPLETE IT
+# Rewriting the Bot.py from scratch!
 
 ## Notes from Nefty
 
@@ -6,10 +6,11 @@ Please note that is my first repo that I am pushing out and I know it is not per
 
 ### To Do List!
 
-1. ADD LICENSE
-2. Add Prometheus Installation Script (Semi ✅)
-3. Add information on how to properly set up Grafana, Prometheus, the Minecraft Node Exporter, and, if needed, Prometheus Node Exporter for node metrics.
-4. Fix any small issues that may arise as this gets cloned or forked.
+1. Work on bot.py code
+2. ADD LICENSE
+3. Add Prometheus Installation Script (Semi ✅)
+4. Add information on how to properly set up Grafana, Prometheus, the Minecraft Node Exporter, and, if needed, Prometheus Node Exporter for node metrics.
+5. Fix any small issues that may arise as this gets cloned or forked.
 
 #### Current Tasks
 ADD LICENSE TO THIS REPO!!!!!!!!
