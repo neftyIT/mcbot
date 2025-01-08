@@ -1,4 +1,5 @@
-#https://github.com/therectifier
+#https://github.com/therectifier <--- Where did this come from ? 
+#^^^^^^^^^ Need to asure credit is given where its due.
 
 import asyncio
 import disnake
