@@ -1,0 +1,12 @@
+[Unit]
+Description=Minecraft Exporter
+Wants=network-online.target
+After=network-online.target
+[Service]
+User=minecraft_exporter
+Group=minecraft_exporter
+Type=simple
+ExecStart=/usr/local/bin/minecraft-exporter \
+ --mc.rcon-password=p@ssw0rd
+[Install]
+WantedBy=multi-user.target

@@ -21,8 +21,6 @@ cat <<EOF >> "$PROMETHEUS_CONFIG"
       - targets: ['localhost:9150']
 EOF
 
-echo "Minecraft Node Exporter configuration added successfully."
-
 # Verify that the Minecraft Node Exporter config was added
 echo "Verifying Minecraft Node Exporter configuration..."
 
