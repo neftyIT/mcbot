@@ -1,20 +1,21 @@
-# Rewriting the Bot.py from scratch!
+# Notes from Nefty
+Please note that is my first repo that I am pushing out and I know it is not perfect (as nothing is in life). I had the help of AI tools to help me understand and learn more as I go and also read many documents such as RCON docs, Minecraft Docs, etc... I used Python to create the commands so the code definitely needs more work done to it to make it better as I feel I could have this more cleaner. Please be sure to report any issues or anything that you know or think can help me create this better as I am still learning and growing my developer skills. **REPO STILL IN TESTING STAGE USE AT YOUR OWN DISCRETION**
 
-## Notes from Nefty
-
-Please note that is my first repo that I am pushing out and I know it is not perfect (as nothing is in life). I had the help of AI tools to help me understand and learn more as I go and also read many documents such as RCON docs, Minecraft Docs, etc... I used Python to create the commands so the code definitely needs more work done to it to make it better as I feel I could have this more cleaner. Please be sure to report any issues or anything that you know or think can help me create this better as I am still learning and growing my developer skills.
+# Notes for the bot
+I need to make the bot public so does who want to add to their server they can via my bot link.
+Currently when you use the command '/start' this will start the server but if you stop the bot, the Minecraft world itself will stop as well. This is something I need to work on with the bot.py code.
 
 ### To Do List!
 
 1. Work on bot.py code
-2. ADD LICENSE
-3. Add Prometheus Installation Script (✅)
-4. Add information on how to properly set up Grafana, Prometheus, the Minecraft Node Exporter, and, if needed, Prometheus Node Exporter for node metrics.
-5. Fix any small issues that may arise as this gets cloned or forked.
+2. Add the invite link for the bot
+3. Fix any small issues that may arise as this gets cloned or forked.
 
-#### Current Tasks
-ADD LICENSE TO THIS REPO!!!!!!!!
-Add information on how to install Dirien Minecraft Exporter
+### Tasks Completed
+ADD LICENSE✅ \
+Add Prometheus Installation Script ✅ \
+Add information on how to properly set up Grafana, Prometheus, and the Minecraft Node Exporter ✅ \
+Add information on how to set up Prometheus Node Exporter for node metrics. ✅
 
 # Minecraft Server with Discord Bot Management
 
@@ -47,7 +48,7 @@ The Discord bot currently supports the following commands for managing the Minec
 ### Prerequisites
 - **Minecraft server**: A running Minecraft server to connect the bot to or you can use the 'server.jar' in the 'newmcworld' directory to create a new world.
 - **Discord Bot**: A Discord bot token to manage the server, a Discord server to add the bot to and a channel to type the commands to.
-- **Java OpenJDK 21**: Currently we are using Java 21 to run the Minecraft server. #Will need to test other Java Version
+- **Java OpenJDK 21**: Currently we are using Java 21 to run the Minecraft server for now.
 
 ### Installation
 1. Clone this repository:
@@ -81,11 +82,11 @@ To monitor the Minecraft server, we utilize the following tools:
 - **Prometheus**: Collects metrics for visualization on Grafana.
 - **Dirien's Minecraft Exporter**: Exports Minecraft server metrics to Prometheus for visualization.
 
-### Grafana Setup
+## Grafana Setup
 
 Follow these steps to set up Grafana for monitoring your Minecraft server:
 
-#### 1. **Install Grafana**
+### 1. **Install Grafana**
 
 We’ve created a script for easy installation and setup of Grafana. The script will install Grafana, configure it, and set up the necessary services. You can find the script in the `/scripts` directory.
 
@@ -99,9 +100,11 @@ To use the script:
 
 4. Grafana runs on port 3000 so ensure your firewall allows the port 3000.
 
-#### 2. **Install Prometheus**
+## Prometheus and Prometheus Node Exporter Setup
 
-We’ve created a script for easy installation and setup of Prometheus. The script will install Prometheus **and adds the custom configuration needed for Dirien's MC Exporter
+### 2. **Install Prometheus**
+
+We’ve created a script for easy installation and setup of Prometheus and Prometheus Node Exporter. The script will install Prometheus **and adds the custom configuration needed for Dirien's MC Exporter
 
 1. Navigate to the `scripts` directory
 
@@ -111,19 +114,31 @@ We’ve created a script for easy installation and setup of Prometheus. The scri
 
 4. Prometheus runs on port 9090 so ensure your firewall allows the port 9090.
 
-#### 3. Setting up the Minecraft Node Exporter for Prometheus
+5. The Prometheus Node Exporter is included in the script. Be sure to run **sudo systemctl status prometheus-node-exporter** to verify that it was installed and is running.
+
+6. You can go to http://localhost:9090/ which should direct you to the Prometheus web interface.
+
+### Dirien's Minecraft Exporter
+
+## 3. Setting up the Minecraft Node Exporter for Prometheus
 
 ### Minecraft Node Exporter
-The Minecraft Node Exporter being used was created by Dirien on Github. Please see below for the link to his repo for the MC Node Exporter for instructions on how to set it up and big thanks from myself as this helped me not have to create a custom node exporter!
+The Minecraft Node Exporter being used in this repo was created by Dirien on Github. Please see below for the link to his repo for the MC Node Exporter to take a further look at his repo.
 [https://github.com/dirien/minecraft-prometheus-exporter]
 
-1. After setting up the MC Exporter, be sure to add the port 9150 to your firewall rules.
+1. I've included the MC Exporter and the Systemd Unit File in the config/minecraft_exporter directory so you will need to do the following:
+     cp minecraft-exporter /usr/local/bin
+     cp minecraft-exporter.service /etc/systemd/system
+  
+2. After setting up the MC Exporter, be sure to add the port 9150 to your firewall rules.
 
-2. Access https://localhost:9150/metrics to ensure you can see metrics from the MC Exporter.
+3. Access https://localhost:9150/metrics to ensure you can see metrics from the MC Exporter.
 
-#### 4. Setting up the Discord McBot
+## Discord McBot
 
-1. Copy the invite link and add the bot to your Discord server.
+### 4. Setting up the Discord McBot
+
+1. Copy the invite link and add the bot to your Discord server shown below:
 
 2. Create a channel on Discord and copy the channel ID.
 
@@ -131,26 +146,22 @@ The Minecraft Node Exporter being used was created by Dirien on Github. Please s
 
     e.g
     
-    bot-token=thisis4examplew1lln0tw0rk
-    server-address=192.168.230.67:25565
-    start-script=home/*user*/mcbot/rconstart.sh
-    server-ip=192.168.230.67
-    server-op=Himothy
-    chat-channel-id=1328407534503067688
-    #enable-rcon & rcon.port should stay the same unless you like customizing
-    enable-rcon=true
-    rcon.password=wh@t1s@p@ssw0rd
-    rcon.port=25575        
+    bot-token=thisis4examplew1lln0tw0rk \
+    server-address=192.168.230.67:25565 \
+    start-script=home/*user*/mcbot/rconstart.sh \
+    server-ip=192.168.230.67 \
+    server-op=Himothy \
+    chat-channel-id=1328407534503067688 \
+    #enable-rcon & rcon.port should stay the same unless you like customizing \
+    enable-rcon=true \
+    rcon.password=wh@t1s@p@ssw0rd \
+    rcon.port=25575 \
 
 4. After entering you environmental variables, start the bot using 'python3 bot.py'. 
 
 5. You should see the bot online in discord and you should be able to use commmands.
 
 6. Ensure that you have the setting 'enable-rcon=**true**' in the server.properties of your Minecraft world as the default is set to **false**
-
-#### Notes for the bot
-
-Currently when you use the command '/start' this will start the server but if you stop the bot, the Minecraft world itself will stop as well. This is something I need to work on with the bot.py code.
 
 ## License
 
