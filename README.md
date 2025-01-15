@@ -133,15 +133,16 @@ The Minecraft Node Exporter being used in this repo was created by Dirien on Git
 
 2. Copy your Token key from the Bot tab and then head to OAuth2
 
-3. In the OAuth2 page, scroll down OAuth2 URL Generator and click the following:
+3. In the OAuth2 page, scroll down OAuth2 URL Generator and click the following: \
          Scope: Bot \
-           Bot Permissions:   Manage Messages and Use Slash Commands \
+   
+           Bot Permissions:   Manage Messages and Use Slash Commands 
 
-4. Once this is completed, copy the URL and invite your bot to your Discord Server
+5. Once this is completed, copy the URL and invite your bot to your Discord Server
 
-5. Create a channel on Discord and copy the channel ID.
+6. Create a channel on Discord and copy the channel ID.
 
-6. Go to the bot.env and fill out the variables:
+7. Go to the bot.env and fill out the variables:
 
     e.g
     
@@ -156,11 +157,11 @@ The Minecraft Node Exporter being used in this repo was created by Dirien on Git
     rcon.password=wh@t1s@p@ssw0rd \
     rcon.port=25575
 
-7. After entering you environmental variables, start the bot using 'python3 (or just python) bot.py'. 
+8. After entering you environmental variables, start the bot using 'python3 (or just python) bot.py'. 
 
-8. You should see the bot online in discord and you should be able to use commmands.
+9. You should see the bot online in discord and you should be able to use commmands.
 
-9. Ensure that you have the setting 'enable-rcon=**true**' in the server.properties of your Minecraft world as the default is set to **false**
+10. Ensure that you have the setting 'enable-rcon=**true**' in the server.properties of your Minecraft world as the default is set to **false**
 
 ## License
 
