@@ -1,21 +1,13 @@
 # Notes from Nefty
-Please note that is my first repo that I am pushing out and I know it is not perfect (as nothing is in life). I had the help of AI tools to help me understand and learn more as I go and also read many documents such as RCON docs, Minecraft Docs, etc... I used Python to create the commands so the code definitely needs more work done to it to make it better as I feel I could have this more cleaner. Please be sure to report any issues or anything that you know or think can help me create this better as I am still learning and growing my developer skills. **REPO STILL IN TESTING STAGE USE AT YOUR OWN DISCRETION**
+Please note that is my first repo that I am pushing out and I know it is not perfect (as nothing is in life). I had the help of AI tools to help me understand and learn more as I go and also read documents such as RCON docs, Minecraft Docs, and more. I used Python to create the commands so the code definitely needs more work done to it to make it better as I feel I could have this more cleaner. Please be sure to report any issues or anything that you know or think can help me create this better as I am still learning and growing my developer skills. **REPO STILL IN TESTING STAGE USE AT YOUR OWN DISCRETION**
 
 # Notes for the bot
-I need to make the bot public so does who want to add to their server they can via my bot link.
 Currently when you use the command '/start' this will start the server but if you stop the bot, the Minecraft world itself will stop as well. This is something I need to work on with the bot.py code.
 
-### To Do List!
+## To Do List!
 
-1. Work on bot.py code
-2. Add the invite link for the bot
-3. Fix any small issues that may arise as this gets cloned or forked.
-
-### Tasks Completed
-ADD LICENSE✅ \
-Add Prometheus Installation Script ✅ \
-Add information on how to properly set up Grafana, Prometheus, and the Minecraft Node Exporter ✅ \
-Add information on how to set up Prometheus Node Exporter for node metrics. ✅
+1. Work on bot.py code to make it cleaner
+2. Create a custom dashboard on Grafana for the MC Node Exporter
 
 # Minecraft Server with Discord Bot Management
 
@@ -73,7 +65,6 @@ The Discord bot currently supports the following commands for managing the Minec
 5. Set up Grafana to visualize metrics of your Minecraft Server (Prometheus, Minecraft Exporter, and any other Grafana tool).
 6. Set up Prometheus and add it as a data source to Grafana
 7. Set up the Minecraft Exporter and add it to your Prometheus.yml config (For assistance on how to set this up, go here https://github.com/dirien/minecraft-prometheus-exporter?tab=readme-ov-file#getting-started)
-8. 
 
 ## Monitoring with Grafana
 
@@ -138,11 +129,19 @@ The Minecraft Node Exporter being used in this repo was created by Dirien on Git
 
 ### 4. Setting up the Discord McBot
 
-1. Copy the invite link and add the bot to your Discord server shown below:
+1. Create a Discord Developer account and create an application.
 
-2. Create a channel on Discord and copy the channel ID.
+2. Copy your Token key from the Bot tab and then head to OAuth2
 
-3. Go to the bot.env and enter fill out the variables:
+3. In the OAuth2 page, scroll down OAuth2 URL Generator and click the following:
+         Scope: Bot
+           Bot Permissions:   Manage Messages and Use Slash Commands
+
+4. Once this is completed, copy the URL and invite your bot to your Discord Server
+
+5. Create a channel on Discord and copy the channel ID.
+
+6. Go to the bot.env and fill out the variables:
 
     e.g
     
@@ -155,13 +154,13 @@ The Minecraft Node Exporter being used in this repo was created by Dirien on Git
     #enable-rcon & rcon.port should stay the same unless you like customizing \
     enable-rcon=true \
     rcon.password=wh@t1s@p@ssw0rd \
-    rcon.port=25575 \
+    rcon.port=25575
 
-4. After entering you environmental variables, start the bot using 'python3 bot.py'. 
+7. After entering you environmental variables, start the bot using 'python3 (or just python) bot.py'. 
 
-5. You should see the bot online in discord and you should be able to use commmands.
+8. You should see the bot online in discord and you should be able to use commmands.
 
-6. Ensure that you have the setting 'enable-rcon=**true**' in the server.properties of your Minecraft world as the default is set to **false**
+9. Ensure that you have the setting 'enable-rcon=**true**' in the server.properties of your Minecraft world as the default is set to **false**
 
 ## License
 
