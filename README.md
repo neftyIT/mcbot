@@ -134,8 +134,8 @@ The Minecraft Node Exporter being used in this repo was created by Dirien on Git
 2. Copy your Token key from the Bot tab and then head to OAuth2
 
 3. In the OAuth2 page, scroll down OAuth2 URL Generator and click the following:
-         Scope: Bot
-           Bot Permissions:   Manage Messages and Use Slash Commands
+         Scope: Bot \
+           Bot Permissions:   Manage Messages and Use Slash Commands \
 
 4. Once this is completed, copy the URL and invite your bot to your Discord Server
 
