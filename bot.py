@@ -1,257 +1,121 @@
-import asyncio
+import sys
 import disnake
-import os
-import socket
-import time
-import urllib.request
 from disnake.ext import commands
-from dotenv import load_dotenv
-from mcrcon import MCRcon
 
-load_dotenv(dotenv_path=f"bot.env")
-mcBot = commands.Bot(sync_commands_debug=True)
-running = False
-error = False
+# Import utilities
+from utils import (
+    init_config,
+    setup_logging,
+    get_logger,
+    ConfigurationError
+)
 
-try:
-    serverport = os.getenv("server-address").split(":")[1]
-except IndexError:
-    serverport = 25565
-if os.getenv("enable-rcon") != "true":
-    print("Rcon is not enabled in your server.properties file. Please change enable-rcon to true. ")
-    error = True
-if os.getenv("rcon.password") == "":
-    print("No password was set for Rcon. Please set a password for Rcon under rcon.password")
-    error = True
-if error:
-    time.sleep(10)
-    exit(code=0)
+# Import Minecraft modules
+from minecraft import init_rcon, init_server_manager
 
-def rcon(cmd):
-    mcr = MCRcon(os.getenv("server-ip"),os.getenv("rcon.password"),port=int(os.getenv("rcon.port")))
-    try:
-        mcr.connect()
-        resp = mcr.command(cmd)
-        mcr.disconnect()
-        return resp
-    except ConnectionRefusedError:
-        print("Rcon unsuccessful: Server in start/stop state. ")
-        return ("The server is either starting up, or shutting down. Please wait a bit, and then try again. ")
 
-def ping(ip, port):
-    if not running:
-        print("Ping failed: Server down.")
-        return -1
+def main():
+    """Main entry point for the bot."""
     
-    # Check server state with rcon
-    if not rcon("list").startswith("There are"):
-        print("Ping failed: Server in start/stop state.")
-        return -2
+    # Setup logging first
+    setup_logging(
+        log_level="INFO",
+        log_file="bot.log",
+        log_to_console=True
+    )
     
+    logger = get_logger(__name__)
+    logger.info("=" * 50)
+    logger.info("Starting Minecraft Discord Bot")
+    logger.info("=" * 50)
+    
+    # Load and validate configuration
     try:
-        # Use the provided IP and port to attempt the socket connection
-        connection_result = socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect_ex((ip, port))
-        
-        # Return 0 if the connection was successful
-        if connection_result == 0:
-            return 0
-        else:
-            # If connect_ex returns a non-zero value, the connection failed
-            return connection_result
-    except socket.gaierror:
-        print("Ping failed: Address unresolvable.")
-        return -3
-    except socket.timeout:
-        print("Ping failed: Connection timeout.")
-        return -4
-    except ConnectionRefusedError:
-        print("Ping failed: Connection refused.")
-        return -5
+        config = init_config("bot.env")
+        logger.info("Configuration loaded and validated successfully")
+    except ConfigurationError as e:
+        logger.error(f"Configuration error: {e}")
+        sys.exit(1)
     except Exception as e:
-        print(f"Ping failed: Unknown error - {e}")
-        return -6
-async def server():
-    global running
-    running = True
-    print("Server started. ")
-    proc = await asyncio.create_subprocess_shell(os.getenv("start-script"),stdout=asyncio.subprocess.PIPE) 
-    while True: 
-        data = await proc.stdout.readline()
-        if not data:
-            break
-        line = data.decode('latin1').rstrip()
-        print(line)
-        asyncio.create_task(on_line(line))
-    running = False
-    print("Server stopped. ")
-
-async def shutdown():
-    print("Auto shutdown thread started. ")
-    await asyncio.sleep(300)
-    while running:
-        print("Attempting auto shutdown... ")
-        try:
-            # Send the 'stop' command directly to the server via RCON
-            rcon("stop")  # Direct shutdown command
-        except Exception as e:
-            print(f"Error while attempting to shutdown: {e}")
-        await asyncio.sleep(180)
-
-async def webhook_send(content,uname,avatar):
-    print(f"Message to Minecraft Server: {content}")  # Log the content to check it's being sent
-    '''
-    for channelid in os.getenv("chat-channel-id").split(","):
-        channel = mcBot.get_channel(int(channelid))
-        exist = False
-        webhooks = await channel.webhooks()
-        for webhook in webhooks:
-            if webhook.name == "MCBotChat":
-                exist = True
-        if not exist:
-            await channel.create_webhook(name="MCBotChat")
-        for webhook in webhooks:
-            try:
-                await webhook.send(str(content), username=uname, avatar_url=avatar)
-            except disnake.errors.InvalidArgument:
-                pass
-            except disnake.errors.HTTPException:
-                pass
-    '''
-
-async def on_line(line):
+        logger.error(f"Unexpected error loading configuration: {e}")
+        sys.exit(1)
+    
+    # Initialize Minecraft managers
     try:
-        split = line.split("<",1)[1].split("> ",1)
-        await webhook_send(split[1],split[0],"https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/977e8c4f-1c99-46cd-b070-10cd97086c08/d36qrs5-017c3744-8c94-4d47-9633-d85b991bf2f7.png")
-    except IndexError:
-        return
-
-@mcBot.event
-async def on_ready():
-    print("Logged in as {0.user}".format(mcBot))
-    await mcBot.change_presence(activity=disnake.Game("/help for help"))
-
-@mcBot.slash_command(description="Starts the server")
-async def start(inter):
-    await inter.response.defer()
-    if running:
-        await inter.edit_original_message(content="Server is already running! ")
-    else:
-        asyncio.create_task(server())
-        await inter.edit_original_message(content="Started server. ")
-
-@mcBot.slash_command(description="Attempts to stop the server")
-async def stop(inter):
-    await inter.response.defer()
-    if running:
-        print("Attempting manual shutdown... ")
-        try:
-            # Send the 'stop' command directly to the server via RCON
-            rcon("stop")  # Directly stop the server without using execute
-            await inter.edit_original_message(content="Server is shutting down.")
-        except disnake.errors.HTTPException:
-            await inter.edit_original_message(content="Could not stop the server. ")
-    else:
-        await inter.edit_original_message(content="Server is already down. ")
-
-@mcBot.slash_command(description="Gets server information")
-async def info(inter):
-    await inter.response.defer()
-    online = ""
-    if running:
-        online=rcon("list")
-    await inter.edit_original_message(content="Server address: `"+os.getenv("server-address")+"`. \nServer running: "+str(running)+". \n"+online)
-
-@mcBot.slash_command(description="Checks server address")
-async def ipcheck(inter):
-    await inter.response.defer()
-    connectcode = ping(os.getenv("server-address").split(":")[0],int(serverport))
-    if connectcode == 0:
-        infoout = f'''I am able to ping the server at {os.getenv("server-address")}. 
-        Check that the address you set in Minecraft matches this. If it's correct, 
-        check your network connection and firewall settings.
-        ''' 
-        await inter.edit_original_message(content=infoout)
-    elif connectcode == -1:
-        await inter.edit_original_message(content="The server is not running. Please start the server to check the address. ")
-    elif connectcode == -2:
-        await inter.edit_original_message(content="The server is either starting up, or shutting down. Please wait a bit, and then try again. ")
-    else:
-        extip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
-        connectcode = ping(extip,serverport)
-        if connectcode == 0:
-            await inter.edit_original_message(content="New IP: "+extip)
-            if serverport == 25565:
-                os.environ["server-address"] = extip
-            else:
-                os.environ["server-address"] = extip + ":" + serverport
+        init_rcon()
+        init_server_manager()
+        logger.info("Minecraft managers initialized")
+    except Exception as e:
+        logger.error(f"Failed to initialize Minecraft managers: {e}")
+        sys.exit(1)
+    
+    # Create bot instance
+    intents = disnake.Intents.default()
+    intents.message_content = True  # Required for reading messages
+    
+    bot = commands.Bot(
+        command_prefix="!",  # Not used, but required
+        intents=intents,
+        sync_commands_debug=True
+    )
+    
+    @bot.event
+    async def on_ready():
+        """Called when the bot is ready."""
+        logger.info(f"Bot logged in as {bot.user} (ID: {bot.user.id})")
+        logger.info(f"Connected to {len(bot.guilds)} guild(s)")
+        
+        # Set bot presence
+        await bot.change_presence(
+            activity=disnake.Game(name="/help for commands")
+        )
+        
+        logger.info("Bot is ready!")
+    
+    @bot.event
+    async def on_slash_command_error(
+        inter: disnake.ApplicationCommandInteraction,
+        error: Exception
+    ):
+        """Handle slash command errors."""
+        logger.error(f"Command error: {error}", exc_info=True)
+        
+        if inter.response.is_done():
+            await inter.edit_original_message(
+                content="❌ An error occurred while processing the command."
+            )
         else:
-            opping = ""
-            for i in os.getenv("server-op").split(','):
-                opping = opping + str("<@"+i+"> ")
-            await inter.edit_original_message(content="I was unable to get a new working address for the server. Please ask the bot host to update the `server-address` field and restart the bot. \nAlternatively, ask "+opping+"to use the $ip-set command to update the server address. \nHowever, you may try this address: `"+extip+"`. ")
-
-@mcBot.slash_command(description="Sends a message in the Minecraft server")
-async def say(inter,message:str):
-    """
-    Sends a message in the Minecraft server
-
-    Parameters
-    ----------
-    message: The message to be sent
-    """
-    await inter.response.defer(ephemeral=True)
-    if not rcon("list").startswith("There are"):
-        await inter.edit_original_message(content="Server is not running. ")
-        return
+            await inter.response.send_message(
+                content="❌ An error occurred while processing the command.",
+                ephemeral=True
+            )
+    
+    # Load all cogs
+    cogs_to_load = [
+        "cogs.server_control",
+        "cogs.server_info",
+        "cogs.chat",
+        "cogs.admin",
+        "cogs.help",
+    ]
+    
+    for cog in cogs_to_load:
+        try:
+            bot.load_extension(cog)
+            logger.info(f"Loaded cog: {cog}")
+        except Exception as e:
+            logger.error(f"Failed to load cog {cog}: {e}")
+    
+    # Start the bot
     try:
-        await inter.edit_original_message(content=rcon('tellraw @a ["{'+str(await mcBot.fetch_user(inter.author.id))+'} '+message+'"]'))
-        return
-    except disnake.errors.HTTPException:
-        pass
-    await webhook_send(message,inter.author.name,inter.author.avatar)
-    await inter.edit_original_message(content="Sent! ")
+        logger.info("Starting bot...")
+        bot.run(config.bot_token)
+    except KeyboardInterrupt:
+        logger.info("Bot shutdown requested")
+    except Exception as e:
+        logger.error(f"Bot error: {e}", exc_info=True)
+        sys.exit(1)
 
-@mcBot.slash_command(description="Get help on all commands")
-async def help(inter):
-    await inter.response.send_message("There are 5 commands that are available to use. \nTo start the server, use `/start`. \nTo get server information, use `/info`. \nTo manually stop the server, use `/stop`. This will only stop the server if no players are online. \nTo send a message in the server, use `/say <message>`. \nIf the address given in `/info` does not work, you can do `/ipcheck`. This will update the server address if the current one does not work. ")
 
-@mcBot.slash_command(description="Executes a Minecraft command on the Minecraft server")
-async def cmd(inter,command:str):
-    """
-    Executes a Minecraft command on the Minecraft server
-
-    Parameters
-    ----------
-    command: The command to be executed
-    """
-    if str(inter.author.id) not in os.getenv("server-op").split(','):
-        await inter.response.send_message(content="You don't have access to this command! ",ephemeral=True)
-        return
-    await inter.response.defer()
-    if running:
-        await inter.edit_original_message(content="Rcon: "+rcon(command))
-    else:
-        await inter.edit_original_message(content="Please start the server to execute this command. ")
-
-@mcBot.event
-async def on_message(message):
-    if message.author.bot:
-        return  
-    if str(message.channel.id) not in os.getenv("chat-channel-id").split(","):
-        return
-    await message.delete()
-    if not rcon("list").startswith("There are"):
-        msg = await message.channel.send("Server is not running. ")
-        await asyncio.sleep(5)
-        await msg.delete()
-        return
-    try:
-        msg = await message.channel.send(rcon('tellraw @a ["{'+str(await mcBot.fetch_user(message.author.id))+'} '+message.content+'"]'))
-        await asyncio.sleep(5)
-        await msg.delete()
-        return
-    except disnake.errors.HTTPException:
-        pass
-    await webhook_send(message.content,message.author.name,message.author.avatar)
-
-mcBot.run(os.getenv("bot-token"))
+if __name__ == "__main__":
+    main()

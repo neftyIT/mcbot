@@ -1,167 +1,248 @@
-# Notes from Nefty
-Please note that is my first repo that I am pushing out and I know it is not perfect (as nothing is in life). I had the help of AI tools to help me understand and learn more as I go and also read documents such as RCON docs, Minecraft Docs, and more. I used Python to create the commands so the code definitely needs more work done to it to make it better as I feel I could have this more cleaner. Please be sure to report any issues or anything that you know or think can help me create this better as I am still learning and growing my developer skills. **REPO STILL IN TESTING STAGE USE AT YOUR OWN DISCRETION**
+# Minecraft Discord Bot 🎮
 
-# Notes for the bot
-Currently when you use the command '/start' this will start the server but if you stop the bot, the Minecraft world itself will stop as well. This is something I need to work on with the bot.py code.
+A professional Discord bot for managing Minecraft servers with full RCON integration, monitoring, and chat relay features.
 
-## To Do List!
+## ✨ Features
 
-1. Work on bot.py code to make it cleaner
-2. Create a custom dashboard on Grafana for the MC Node Exporter
+- **Server Control**: Start and stop your Minecraft server from Discord
+- **Chat Integration**: Bidirectional chat between Discord and Minecraft
+- **Admin Commands**: Execute Minecraft commands via Discord (OP only)
+- **Server Monitoring**: Real-time player counts and server status
+- **Network Tools**: Automatic IP checking and connectivity diagnostics
+- **Prometheus Integration**: Export metrics for Grafana dashboards
+- **Clean Architecture**: Modular cog-based design for easy maintenance
 
-# Minecraft Server with Discord Bot Management
+## 📋 Requirements
 
-This repository contains a Minecraft server setup that is managed using a Discord bot written in Python. The bot allows server management through a variety of commands, and the server's metrics and logs are visualized using Grafana.
+- Python 3.9+
+- Minecraft Server (Java Edition) with RCON enabled
+- Discord Bot with appropriate permissions
+- (Optional) Prometheus & Grafana for monitoring
 
-## Commands
+## 🚀 Quick Start
 
-The Discord bot currently supports the following commands for managing the Minecraft server:
+### 1. Clone the Repository
 
-1. **/start**  
-   *Description*: Starts the Minecraft server.
+```bash
+git clone https://github.com/yourusername/mcbot.git
+cd mcbot
+```
 
-2. **/info**  
-   *Description*: Retrieves server information, including the server's address.
+### 2. Install Dependencies
 
-3. **/stop**  
-   *Description*: Stops the Minecraft server, but only if no players are currently online.
+```bash
+pip install -r requirements.txt
+```
 
-4. **/say <message>**  
-   *Description*: Sends a message in the Minecraft server chat.
+### 3. Configure Environment
 
-5. **/ipcheck**  
-   *Description*: Checks and updates the server address if the one provided in the /info command doesn't work.
+Copy the example environment file and fill in your values:
 
-6. **/cmd <command>**  
-   *Description*: Executes a command directly on the Minecraft server.
+```bash
+cp .env.example bot.env
+```
 
-## Setup
+Edit `bot.env`:
 
-### Prerequisites
-- **Minecraft server**: A running Minecraft server to connect the bot to or you can use the 'server.jar' in the 'newmcworld' directory to create a new world.
-- **Discord Bot**: A Discord bot token to manage the server, a Discord server to add the bot to and a channel to type the commands to.
-- **Java OpenJDK 21**: Currently we are using Java 21 to run the Minecraft server for now.
+```env
+# Discord Configuration
+bot-token=YOUR_DISCORD_BOT_TOKEN
+chat-channel-id=YOUR_CHANNEL_ID
+server-op=YOUR_DISCORD_USER_ID
 
-### Installation
-1. Clone this repository:
-    ```bash
-    git clone https://github.com/neftyIT/mcbot.git
-    ```
+# Minecraft Server Configuration
+server-address=YOUR_SERVER_IP:25565
+server-ip=YOUR_SERVER_IP
+start-script=/path/to/your/rconstart.sh
 
-2. Install necessary dependencies:
-    ```bash
-    cd mcbot
-    pip install -r requirements.txt
-    ```
+# RCON Configuration
+enable-rcon=true
+rcon.password=YOUR_RCON_PASSWORD
+rcon.port=25575
+```
 
-3. Configure the bot:
-    - Add your Discord bot token and Minecraft server details in the `bot.env` file.
+### 4. Enable RCON on Minecraft Server
 
-4. Start the bot:
-    ```bash
-    python3 bot.py
-    ```
+Edit your Minecraft server's `server.properties`:
 
-5. Set up Grafana to visualize metrics of your Minecraft Server (Prometheus, Minecraft Exporter, and any other Grafana tool).
-6. Set up Prometheus and add it as a data source to Grafana
-7. Set up the Minecraft Exporter and add it to your Prometheus.yml config (For assistance on how to set this up, go here https://github.com/dirien/minecraft-prometheus-exporter?tab=readme-ov-file#getting-started)
+```properties
+enable-rcon=true
+rcon.password=YOUR_RCON_PASSWORD
+rcon.port=25575
+```
 
-## Monitoring with Grafana
+### 5. Run the Bot
 
-To monitor the Minecraft server, we utilize the following tools:
+```bash
+python bot.py
+```
 
-- **Prometheus**: Collects metrics for visualization on Grafana.
-- **Dirien's Minecraft Exporter**: Exports Minecraft server metrics to Prometheus for visualization.
+## 📁 Project Structure
 
-## Grafana Setup
+```
+mcbot/
+├── cogs/                   # Discord command modules
+│   ├── server_control.py   # Start/stop commands
+│   ├── server_info.py      # Info/ipcheck commands
+│   ├── chat.py             # Chat relay
+│   ├── admin.py            # OP commands
+│   └── help.py             # Help command
+├── minecraft/              # Minecraft integration
+│   ├── rcon_client.py      # RCON wrapper
+│   └── server_manager.py   # Process management
+├── utils/                  # Utilities
+│   ├── config.py           # Configuration
+│   ├── logger.py           # Logging setup
+│   ├── network.py          # Network utilities
+│   └── exceptions.py       # Custom exceptions
+├── scripts/                # Installation scripts
+│   ├── grafana_install.sh
+│   └── prometheus_install.sh
+├── bot.py                  # Main entry point
+└── requirements.txt        # Dependencies
+```
 
-Follow these steps to set up Grafana for monitoring your Minecraft server:
+## 🎮 Commands
 
-### 1. **Install Grafana**
+### Server Control
+- `/start` - Start the Minecraft server
+- `/stop` - Stop the server (only if no players online)
+- `/info` - Get server status and player information
 
-We’ve created a script for easy installation and setup of Grafana. The script will install Grafana, configure it, and set up the necessary services. You can find the script in the `/scripts` directory.
+### Chat
+- `/say <message>` - Send a message to Minecraft chat
+- Messages in designated channels automatically relay to Minecraft
 
-To use the script:
+### Network
+- `/ipcheck` - Check server connectivity and get address suggestions
 
-1. Navigate to the `scripts` directory
+### Admin (OP Only)
+- `/cmd <command>` - Execute Minecraft server commands
 
-2. Run the script ./grafana_install.sh
+### Help
+- `/help` - Display all available commands
 
-3. This script should install Grafana and it's configuration needed. You should be able to find the 'grafana.ini' file in the '/etc/grafana' directory.
+## 🔧 Configuration Options
 
-4. Grafana runs on port 3000 so ensure your firewall allows the port 3000.
+### Discord Settings
 
-## Prometheus and Prometheus Node Exporter Setup
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `bot-token` | Your Discord bot token | Yes |
+| `chat-channel-id` | Channel IDs for chat relay (comma-separated) | No |
+| `server-op` | Discord user IDs with OP permissions (comma-separated) | No |
 
-### 2. **Install Prometheus**
+### Minecraft Settings
 
-We’ve created a script for easy installation and setup of Prometheus and Prometheus Node Exporter. The script will install Prometheus **and adds the custom configuration needed for Dirien's MC Exporter
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `server-address` | Public server address | Yes |
+| `server-ip` | Server IP for RCON | Yes |
+| `start-script` | Path to server start script | Yes |
 
-1. Navigate to the `scripts` directory
+### RCON Settings
 
-2. Run the script with **sudo** ./prometheus_install.sh. This allows for the MC Exporter configuration to be added to the prometheus.yml
+| Variable | Description | Required | Default |
+|----------|-------------|----------|---------|
+| `enable-rcon` | Enable RCON | Yes | `true` |
+| `rcon.password` | RCON password | Yes | - |
+| `rcon.port` | RCON port | No | `25575` |
 
-3. This script should install Prometheus and it's configuration needed. You should be able to find the 'prometheus.yml' file in the '/etc/prometheus' directory.
+## 📊 Monitoring Setup
 
-4. Prometheus runs on port 9090 so ensure your firewall allows the port 9090.
+### Prometheus
 
-5. The Prometheus Node Exporter is included in the script. Be sure to run **sudo systemctl status prometheus-node-exporter** to verify that it was installed and is running.
+Install Prometheus using the provided script:
 
-6. You can go to http://localhost:9090/ which should direct you to the Prometheus web interface.
+```bash
+cd scripts
+sudo ./prometheus_install.sh
+```
 
-### Dirien's Minecraft Exporter
+### Grafana
 
-## 3. Setting up the Minecraft Node Exporter for Prometheus
+Install Grafana:
 
-### Minecraft Node Exporter
-The Minecraft Node Exporter being used in this repo was created by Dirien on Github. Please see below for the link to his repo for the MC Node Exporter to take a further look at his repo.
-[https://github.com/dirien/minecraft-prometheus-exporter]
+```bash
+cd scripts
+sudo ./grafana_install.sh
+```
 
-1. I've included the MC Exporter and the Systemd Unit File in the config/minecraft_exporter directory so you will need to do the following:
-     cp minecraft-exporter /usr/local/bin
-     cp minecraft-exporter.service /etc/systemd/system
-  
-2. After setting up the MC Exporter, be sure to add the port 9150 to your firewall rules.
+### Minecraft Exporter
 
-3. Access https://localhost:9150/metrics to ensure you can see metrics from the MC Exporter.
+1. Copy the exporter files:
+```bash
+sudo cp config/minecraft_exporter/minecraft-exporter /usr/local/bin/
+sudo cp config/minecraft_exporter/minecraft-exporter.service /etc/systemd/system/
+```
 
-## Discord McBot
+2. Enable and start:
+```bash
+sudo systemctl enable minecraft-exporter
+sudo systemctl start minecraft-exporter
+```
 
-### 4. Setting up the Discord McBot
+3. Configure firewall:
+```bash
+sudo ufw allow 9150/tcp
+```
 
-1. Create a Discord Developer account and create an application.
+## 🐛 Troubleshooting
 
-2. Copy your Token key from the Bot tab and then head to OAuth2
+### Server Won't Start
+- Check that `start-script` path is correct
+- Verify Java is installed: `java -version`
+- Check script permissions: `chmod +x /path/to/rconstart.sh`
 
-3. In the OAuth2 page, scroll down OAuth2 URL Generator and click the following: \
-         Scope: Bot \   
-           Bot Permissions:   Manage Messages and Use Slash Commands 
+### RCON Connection Failed
+- Verify `enable-rcon=true` in `server.properties`
+- Check RCON password matches in both configs
+- Ensure firewall allows RCON port (default 25575)
 
-4. Once this is completed, copy the URL and invite your bot to your Discord Server
+### Chat Not Working
+- Verify `chat-channel-id` is correct
+- Bot needs "Manage Webhooks" permission
+- Check bot has "Message Content Intent" enabled
 
-5. Create a channel on Discord and copy the channel ID.
+### Commands Not Showing
+- Wait a few minutes for Discord to sync commands
+- Check bot has "Use Slash Commands" permission
+- Try kicking and re-inviting the bot
 
-6. Go to the bot.env and fill out the variables:
+## 🔒 Security Notes
 
-    e.g
-    
-    bot-token=thisis4examplew1lln0tw0rk \
-    server-address=192.168.230.67:25565 \
-    start-script=home/*user*/mcbot/rconstart.sh \
-    server-ip=192.168.230.67 \
-    server-op=Himothy \
-    chat-channel-id=1328407534503067688 \
-    #enable-rcon & rcon.port should stay the same unless you like customizing \
-    enable-rcon=true \
-    rcon.password=wh@t1s@p@ssw0rd \
-    rcon.port=25575
+- **Never commit `bot.env`** - It contains sensitive tokens
+- Use strong RCON passwords
+- Restrict OP commands to trusted users only
+- Keep dependencies updated for security patches
 
-7. After entering you environmental variables, start the bot using 'python3 (or just python) bot.py'. 
+## 🤝 Contributing
 
-8. You should see the bot online in discord and you should be able to use commmands.
+Contributions are welcome! Please:
 
-9. Ensure that you have the setting 'enable-rcon=**true**' in the server.properties of your Minecraft world as the default is set to **false**
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-## License
+## 📝 License
 
 This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [disnake](https://github.com/DisnakeDev/disnake) - Discord API wrapper
+- [mcrcon](https://github.com/barneygale/MCRcon) - RCON client library
+- [Dirien's Minecraft Exporter](https://github.com/dirien/minecraft-prometheus-exporter) - Prometheus metrics
+
+## 📧 Support
+
+For issues and questions:
+- Open an issue on GitHub
+- Check existing issues for solutions
+- Join our Discord community (link)
+
+---
+
+**Note**: This is a refactored and improved version of the original bot with better structure, error handling, and maintainability.

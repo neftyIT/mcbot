@@ -1,19 +1,58 @@
-# Ignore virtual environment
-.venv/
-
-# Ignore environment variable files (e.g., for storing API keys, etc.)
-bot.env
-
-# Ignore Python compiled files
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
 
-# Ignore log files
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Environment Variables
+.env
+bot.env
+*.env
+!.env.example
+
+# Logs
 *.log
+logs/
 
-# Ignore IDE files
+# IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
+# OS
+.DS_Store
+Thumbs.db
+
+# Minecraft Server Files
+newmcworld/
+server.jar
+*.jar
+eula.txt
+server.properties
+world/
+world_nether/
+world_the_end/
+usercache.json
+banned-*.json
+ops.json
+whitelist.json
+
+# Database
+*.db
+*.sqlite
+
+# Monitoring
+prometheus.yml
+grafana.ini
