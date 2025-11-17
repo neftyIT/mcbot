@@ -3,7 +3,6 @@
 from typing import List, Optional
 from mcrcon import MCRcon
 from utils import (
-    config,
     get_logger,
     RconConnectionError,
     RconCommandError,
@@ -18,6 +17,9 @@ class RconClient:
     
     def __init__(self):
         """Initialize RCON client with configuration."""
+        # Import the config module directly to get the updated global
+        from utils.config import config
+        
         self.host = config.server_ip
         self.password = config.rcon_password
         self.port = config.rcon_port

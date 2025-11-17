@@ -31,22 +31,21 @@ def main():
     
     # Load and validate configuration
     try:
-        config = init_config("bot.env")
+        config = init_config(".env")
         logger.info("Configuration loaded and validated successfully")
+        
+        # Initialize Minecraft managers AFTER config is loaded
+        init_rcon()
+        init_server_manager()
+        logger.info("Minecraft managers initialized")
+        
     except ConfigurationError as e:
         logger.error(f"Configuration error: {e}")
         sys.exit(1)
     except Exception as e:
         logger.error(f"Unexpected error loading configuration: {e}")
-        sys.exit(1)
-    
-    # Initialize Minecraft managers
-    try:
-        init_rcon()
-        init_server_manager()
-        logger.info("Minecraft managers initialized")
-    except Exception as e:
-        logger.error(f"Failed to initialize Minecraft managers: {e}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
     
     # Create bot instance
@@ -64,6 +63,10 @@ def main():
         """Called when the bot is ready."""
         logger.info(f"Bot logged in as {bot.user} (ID: {bot.user.id})")
         logger.info(f"Connected to {len(bot.guilds)} guild(s)")
+
+            # Log guild names
+        for guild in bot.guilds:
+            logger.info(f"  - {guild.name} (ID: {guild.id})")
         
         # Set bot presence
         await bot.change_presence(

@@ -2,7 +2,6 @@
 
 import disnake
 from disnake.ext import commands
-from minecraft import server_manager, rcon_client
 from utils import (
     get_logger,
     ServerAlreadyRunningError,
@@ -35,6 +34,10 @@ class ServerControl(commands.Cog):
         Args:
             inter: The interaction context
         """
+        # Import here to get the initialized instances
+        from minecraft.server_manager import server_manager
+        from minecraft.rcon_client import rcon_client
+        
         await inter.response.defer()
         logger.info(f"Start command invoked by {inter.author}")
         
@@ -76,6 +79,10 @@ class ServerControl(commands.Cog):
         Args:
             inter: The interaction context
         """
+        # Import here to get the initialized instances
+        from minecraft.server_manager import server_manager
+        from minecraft.rcon_client import rcon_client
+        
         await inter.response.defer()
         logger.info(f"Stop command invoked by {inter.author}")
         

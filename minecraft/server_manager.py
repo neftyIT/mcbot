@@ -62,6 +62,9 @@ class ServerManager:
         if self.state != ServerState.STOPPED:
             raise ServerAlreadyRunningError(f"Server is in state: {self.state.value}")
         
+        from utils.config import config
+
+
         logger.info(f"Starting Minecraft server with script: {config.start_script}")
         self.state = ServerState.STARTING
         

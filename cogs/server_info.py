@@ -2,9 +2,7 @@
 
 import disnake
 from disnake.ext import commands
-from minecraft import server_manager, rcon_client
 from utils import (
-    config,
     get_logger,
     NetworkUtils,
     RconConnectionError
@@ -35,6 +33,11 @@ class ServerInfo(commands.Cog):
         Args:
             inter: The interaction context
         """
+        # Import here to get initialized instances
+        from minecraft.server_manager import server_manager
+        from minecraft.rcon_client import rcon_client
+        from utils.config import config
+        
         await inter.response.defer()
         logger.info(f"Info command invoked by {inter.author}")
         
@@ -71,6 +74,10 @@ class ServerInfo(commands.Cog):
         Args:
             inter: The interaction context
         """
+        # Import here to get initialized instances
+        from minecraft.server_manager import server_manager
+        from utils.config import config
+        
         await inter.response.defer()
         logger.info(f"IPCheck command invoked by {inter.author}")
         

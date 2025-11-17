@@ -3,9 +3,7 @@
 import re
 import disnake
 from disnake.ext import commands
-from minecraft import server_manager, rcon_client
 from utils import (
-    config,
     get_logger,
     ServerNotRunningError,
     RconConnectionError
@@ -40,6 +38,10 @@ class Chat(commands.Cog):
             inter: The interaction context
             message: The message to send
         """
+        # Import here to get initialized instances
+        from minecraft.server_manager import server_manager
+        from minecraft.rcon_client import rcon_client
+        
         await inter.response.defer(ephemeral=True)
         logger.info(f"Say command invoked by {inter.author}: {message}")
         
@@ -82,6 +84,11 @@ class Chat(commands.Cog):
         Args:
             message: The Discord message
         """
+        # Import here to get initialized instances
+        from minecraft.server_manager import server_manager
+        from minecraft.rcon_client import rcon_client
+        from utils.config import config
+        
         # Ignore bot messages
         if message.author.bot:
             return
@@ -131,6 +138,9 @@ class Chat(commands.Cog):
         Args:
             line: A line of server output
         """
+        # Import here to get initialized instances
+        from utils.config import config
+        
         # Parse Minecraft chat format: "<username> message"
         # Example: "[12:34:56] [Server thread/INFO]: <Steve> Hello world"
         
@@ -154,6 +164,8 @@ class Chat(commands.Cog):
             username: Minecraft username
             message: Chat message
         """
+        from utils.config import config
+        
         for channel_id in config.chat_channel_ids:
             try:
                 channel = self.bot.get_channel(channel_id)
@@ -200,5 +212,6 @@ def setup(bot: commands.Bot):
     bot.add_cog(chat_cog)
     
     # Register the chat handler with the server manager
-    from minecraft import server_manager
+    # We need to access it through the module where it's actually defined
+    from minecraft.server_manager import server_manager
     server_manager.set_output_callback(chat_cog.handle_minecraft_chat)
