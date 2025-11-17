@@ -1,3 +1,11 @@
+"""
+Minecraft Discord Bot - Main Entry Point
+
+Author: Nefty IT
+Repository: https://github.com/neftyIT/mcbot
+License: Apache 2.0
+"""
+
 import sys
 import disnake
 from disnake.ext import commands

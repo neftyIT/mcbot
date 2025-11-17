@@ -36,23 +36,11 @@ logs/
 Thumbs.db
 
 # Minecraft Server Files
-newmcworld/
-server.jar
-*.jar
-eula.txt
-server.properties
-world/
-world_nether/
-world_the_end/
-usercache.json
-banned-*.json
-ops.json
-whitelist.json
+world/*
+!world/server.jar
+!world/rconstart.sh
 
 # Database
 *.db
 *.sqlite
 
-# Monitoring
-prometheus.yml
-grafana.ini
